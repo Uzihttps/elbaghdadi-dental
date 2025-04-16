@@ -88,16 +88,16 @@ export default {
 					'900': '#134a41',
 				},
 				gold: {
-					'50': '#fbf8f1',
-					'100': '#f7efd8',
-					'200': '#f0dda8',
-					'300': '#e7c665',
-					'400': '#e0b03a',
-					'500': '#d49a20',
-					'600': '#bf7c16',
-					'700': '#9e5d16',
-					'800': '#814a19',
-					'900': '#6c3d18',
+					'50': '#fefbf3',
+					'100': '#fef6e3',
+					'200': '#fbe8bb',
+					'300': '#f9d68e',
+					'400': '#f3be4b',
+					'500': '#e4aa28',
+					'600': '#cb8a18',
+					'700': '#a96615',
+					'800': '#8a5018',
+					'900': '#74421a',
 				},
 				charcoal: {
 					'50': '#f6f7f7',
@@ -169,7 +169,23 @@ export default {
 						opacity: '1', 
 						transform: 'scale(1)'
 					}
-				}
+				},
+        'shimmer': {
+          '0%': {
+            backgroundPosition: '-200% 0',
+          },
+          '100%': {
+            backgroundPosition: '200% 0',
+          },
+        },
+        'float': {
+          '0%, 100%': {
+            transform: 'translateY(0)',
+          },
+          '50%': {
+            transform: 'translateY(-8px)',
+          },
+        },
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
@@ -177,11 +193,22 @@ export default {
 				'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
 				'fade-in': 'fade-in 0.5s ease-out forwards',
 				'slide-in-right': 'slide-in-right 0.5s ease-out forwards',
-				'zoom-in': 'zoom-in 0.5s ease-out forwards'
+				'zoom-in': 'zoom-in 0.5s ease-out forwards',
+        'shimmer': 'shimmer 2s linear infinite',
+        'float': 'float 6s ease-in-out infinite',
 			},
 			fontFamily: {
 				'poppins': ['Poppins', 'sans-serif'],
-			}
+				'playfair': ['Playfair Display', 'serif'],
+			},
+      boxShadow: {
+        'gold': '0 4px 20px -2px rgba(228, 178, 65, 0.25)',
+        'gold-lg': '0 10px 30px -3px rgba(228, 178, 65, 0.3)',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gold-shimmer': 'linear-gradient(90deg, transparent, rgba(228, 178, 65, 0.2), transparent)',
+      },
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
