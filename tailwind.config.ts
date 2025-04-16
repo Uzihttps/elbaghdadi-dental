@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -42,6 +41,9 @@ export default {
           '800': '#1a1a1a',
           '900': '#0d0d0d'
         }
+      },
+      fontFamily: {
+        'poppins': ['Poppins', 'sans-serif']
       }
     }
   },
