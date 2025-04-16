@@ -12,22 +12,38 @@ interface ServiceCardProps {
 }
 
 const ServiceCard = ({ icon: Icon, title, description, delay = 0, className }: ServiceCardProps) => {
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    },
+    hover: {
+      y: -10,
+      transition: {
+        duration: 0.3
+      }
+    }
+  };
+
   return (
     <motion.div 
       className={cn(
-        "bg-white p-6 rounded-xl shadow-md border border-slate-100 hover:shadow-lg transition-shadow",
+        "elegant-card p-6 rounded-xl backdrop-blur-sm transition-all duration-300",
         className
       )}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: delay }}
+      variants={cardVariants}
+      whileHover="hover"
     >
-      <div className="h-12 w-12 rounded-lg bg-dental-100 text-dental-600 flex items-center justify-center mb-4">
-        <Icon className="h-6 w-6" />
+      <div className="h-14 w-14 rounded-lg bg-gold-500/10 text-gold-400 flex items-center justify-center mb-5 backdrop-blur-sm">
+        <Icon className="h-7 w-7" />
       </div>
-      <h3 className="text-xl font-semibold text-slate-900 mb-2">{title}</h3>
-      <p className="text-slate-600">{description}</p>
+      <h3 className="text-xl font-semibold text-white mb-3">{title}</h3>
+      <p className="text-slate-300">{description}</p>
     </motion.div>
   );
 };

@@ -86,6 +86,30 @@ export default {
 					'700': '#147261',
 					'800': '#145a4e',
 					'900': '#134a41',
+				},
+				gold: {
+					'50': '#fbf8f1',
+					'100': '#f7efd8',
+					'200': '#f0dda8',
+					'300': '#e7c665',
+					'400': '#e0b03a',
+					'500': '#d49a20',
+					'600': '#bf7c16',
+					'700': '#9e5d16',
+					'800': '#814a19',
+					'900': '#6c3d18',
+				},
+				charcoal: {
+					'50': '#f6f7f7',
+					'100': '#e1e4e6',
+					'200': '#c2c9cd',
+					'300': '#9ca7ae',
+					'400': '#768590',
+					'500': '#5d6b78',
+					'600': '#475561',
+					'700': '#394550',
+					'800': '#2d3742',
+					'900': '#1A1F2C',
 				}
 			},
 			borderRadius: {
@@ -119,12 +143,41 @@ export default {
 						opacity: '1',
 						transform: 'translateY(0)'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0'
+					},
+					'100%': {
+						opacity: '1'
+					}
+				},
+				'slide-in-right': {
+					'0%': {
+						transform: 'translateX(100%)'
+					},
+					'100%': {
+						transform: 'translateX(0)'
+					}
+				},
+				'zoom-in': {
+					'0%': {
+						opacity: '0', 
+						transform: 'scale(0.95)'
+					},
+					'100%': {
+						opacity: '1', 
+						transform: 'scale(1)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
-				'fade-in-up': 'fade-in-up 0.5s ease-out forwards'
+				'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
+				'fade-in': 'fade-in 0.5s ease-out forwards',
+				'slide-in-right': 'slide-in-right 0.5s ease-out forwards',
+				'zoom-in': 'zoom-in 0.5s ease-out forwards'
 			},
 			fontFamily: {
 				'poppins': ['Poppins', 'sans-serif'],

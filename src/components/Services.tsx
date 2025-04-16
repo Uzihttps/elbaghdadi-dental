@@ -37,23 +37,39 @@ const Services = () => {
     },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
   return (
-    <section id="services" className="section bg-slate-50">
+    <section id="services" className="section bg-charcoal-900">
       <div className="container">
         <motion.div 
           className="text-center max-w-2xl mx-auto mb-12"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Our Services</h2>
-          <p className="text-slate-600">
+          <h2 className="text-3xl md:text-4xl font-bold gold-gradient mb-4">Our Services</h2>
+          <p className="text-slate-300">
             Comprehensive dental care and advanced aesthetic treatments to enhance your natural beauty.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           {services.map((service, index) => (
             <ServiceCard 
               key={service.title}
@@ -63,7 +79,7 @@ const Services = () => {
               delay={0.1 * index}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
