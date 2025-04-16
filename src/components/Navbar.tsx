@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Menu, X, Tooth } from "lucide-react";
+import { Menu, X, Stethoscope } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -34,7 +34,7 @@ const Navbar = () => {
     >
       <div className="container flex items-center justify-between">
         <a href="#" className="flex items-center gap-2">
-          <Tooth className="h-8 w-8 text-dental-600" />
+          <Stethoscope className="h-8 w-8 text-dental-600" />
           <span className="font-bold text-xl text-dental-900">El Baghdadi Dental</span>
         </a>
 

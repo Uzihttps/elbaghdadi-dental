@@ -1,12 +1,12 @@
 
-import { Tooth, Syringe, Scissors, Sparkles, Droplet, SmilePlus } from "lucide-react";
+import { Stethoscope, Syringe, Scissors, Sparkles, Droplet, SmilePlus } from "lucide-react";
 import { motion } from "framer-motion";
 import ServiceCard from "./ServiceCard";
 
 const Services = () => {
   const services = [
     {
-      icon: Tooth,
+      icon: Stethoscope,
       title: "General Dentistry",
       description: "Comprehensive dental care including cleanings, fillings, and preventive treatments.",
     },

@@ -1,5 +1,5 @@
 
-import { Tooth, Instagram, Facebook, Twitter } from "lucide-react";
+import { Stethoscope, Instagram, Facebook, Twitter } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -41,7 +41,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Tooth className="h-8 w-8 text-dental-400" />
+              <Stethoscope className="h-8 w-8 text-dental-400" />
               <span className="font-bold text-xl text-white">El Baghdadi Dental</span>
             </div>
             <p className="mb-6">
