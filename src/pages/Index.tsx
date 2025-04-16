@@ -11,10 +11,11 @@ import Footer from "@/components/Footer";
 const Index = () => {
   useEffect(() => {
     document.title = "El Baghdadi Dental | Dentistry & Aesthetic Medicine";
+    document.body.classList.add('bg-black');
   }, []);
 
   return (
-    <>
+    <div className="bg-black text-white min-h-screen">
       <Navbar />
       <Hero />
       <Services />
@@ -22,7 +23,7 @@ const Index = () => {
       <Testimonials />
       <Contact />
       <Footer />
-    </>
+    </div>
   );
 };
 
