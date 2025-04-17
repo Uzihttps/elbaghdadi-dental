@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Stethoscope } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -7,10 +8,28 @@ import { cn } from "@/lib/utils";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
+      
+      // Determine which section is currently in view
+      const sections = ["home", "services", "about", "testimonials", "contact"];
+      const scrollPosition = window.scrollY + 100;
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const offsetTop = element.offsetTop;
+          const height = element.offsetHeight;
+          
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + height) {
+            setActiveSection(section);
+            break;
+          }
+        }
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -26,17 +45,40 @@ const Navbar = () => {
   ];
 
   return (
-    <nav 
+    <motion.nav 
       className={cn(
-        "fixed top-0 left-0 w-full z-50 transition-all duration-300",
-        isScrolled ? "bg-white shadow-md py-2" : "bg-transparent py-4"
+        "fixed top-0 left-0 w-full z-50 transition-all duration-500",
+        isScrolled ? "bg-black/80 backdrop-blur-lg shadow-lg shadow-gold-500/5 py-2" : "bg-transparent py-4"
       )}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="container flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2">
-          <Stethoscope className="h-8 w-8 text-dental-600" />
-          <span className="font-bold text-xl text-dental-900">El Baghdadi Dental</span>
-        </a>
+        <motion.a 
+          href="#" 
+          className="flex items-center gap-2"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <div className="relative">
+            <Stethoscope className="h-8 w-8 text-gold-400" />
+            <motion.div 
+              className="absolute inset-0 bg-gold-400 rounded-full"
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ 
+                scale: [0.5, 1.5, 0.5], 
+                opacity: [0.3, 0, 0.3],
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          </div>
+          <span className="font-bold text-xl text-white font-serif">El Baghdadi <span className="text-gold-400">Dental</span></span>
+        </motion.a>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
@@ -45,52 +87,93 @@ const Navbar = () => {
               <li key={item.name}>
                 <a 
                   href={item.href} 
-                  className="text-slate-700 hover:text-dental-600 transition-colors font-medium"
+                  className={cn(
+                    "relative py-2 px-1 font-medium transition-colors",
+                    activeSection === item.href.substring(1) 
+                      ? "text-gold-400" 
+                      : "text-gray-300 hover:text-gold-400"
+                  )}
                 >
                   {item.name}
+                  {activeSection === item.href.substring(1) && (
+                    <motion.div 
+                      className="absolute bottom-0 left-0 w-full h-0.5 bg-gold-400"
+                      layoutId="navunderline"
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
                 </a>
               </li>
             ))}
           </ul>
-          <Button asChild className="bg-dental-600 hover:bg-dental-700">
-            <a href="#booking">Book Appointment</a>
-          </Button>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Button asChild className="bg-gold-500 hover:bg-gold-600 text-black rounded-md">
+              <a href="#booking">Book Appointment</a>
+            </Button>
+          </motion.div>
         </div>
 
         {/* Mobile Navigation Toggle Button */}
-        <button 
-          className="md:hidden p-2 text-dental-900" 
+        <motion.button 
+          className="md:hidden p-2 text-gold-400" 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
           aria-label="Toggle menu"
         >
           {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        </motion.button>
       </div>
 
       {/* Mobile Navigation Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-slate-100">
-          <ul className="container flex flex-col py-4">
-            {navItems.map((item) => (
-              <li key={item.name} className="py-2">
-                <a 
-                  href={item.href} 
-                  className="text-slate-700 hover:text-dental-600 transition-colors block"
-                  onClick={() => setIsMenuOpen(false)}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div 
+            className="md:hidden bg-black/90 backdrop-blur-lg border-t border-gold-500/10"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ul className="container flex flex-col py-4">
+              {navItems.map((item, index) => (
+                <motion.li 
+                  key={item.name} 
+                  className="py-3"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
-                  {item.name}
-                </a>
-              </li>
-            ))}
-            <li className="py-3">
-              <Button asChild className="w-full bg-dental-600 hover:bg-dental-700">
-                <a href="#booking" onClick={() => setIsMenuOpen(false)}>Book Appointment</a>
-              </Button>
-            </li>
-          </ul>
-        </div>
-      )}
-    </nav>
+                  <a 
+                    href={item.href} 
+                    className={cn(
+                      "text-gray-300 hover:text-gold-400 transition-colors block",
+                      activeSection === item.href.substring(1) && "text-gold-400"
+                    )}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {item.name}
+                  </a>
+                </motion.li>
+              ))}
+              <motion.li 
+                className="py-3"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: navItems.length * 0.1 }}
+              >
+                <Button asChild className="w-full bg-gold-500 hover:bg-gold-600 text-black">
+                  <a href="#booking" onClick={() => setIsMenuOpen(false)}>Book Appointment</a>
+                </Button>
+              </motion.li>
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.nav>
   );
 };
 

@@ -9,6 +9,7 @@
 @layer base {
   html, body, #root {
     @apply bg-black text-white min-h-screen;
+    scroll-behavior: smooth;
   }
 
   :root {
@@ -27,11 +28,11 @@
   }
 
   body {
-    @apply bg-black text-white font-poppins;
+    @apply bg-black text-white font-poppins overflow-x-hidden;
   }
 
   .section {
-    @apply py-20 md:py-28;
+    @apply py-20 md:py-28 relative;
   }
 
   .container {
@@ -51,15 +52,28 @@
   }
   
   .elegant-card {
-    @apply bg-gradient-to-b from-charcoal-800 to-charcoal-900 border border-gold-500/20 shadow-lg hover:shadow-gold-500/10;
+    @apply bg-gradient-to-b from-charcoal-800 to-charcoal-900 border border-gold-500/20 shadow-lg hover:shadow-gold-500/10 transition-all duration-500;
   }
   
   .luxury-card {
-    @apply bg-gradient-to-b from-charcoal-800/80 to-black border border-gold-500/30 shadow-xl hover:shadow-gold-500/20 transition-all;
+    @apply bg-gradient-to-b from-charcoal-800/80 to-black border border-gold-500/30 shadow-xl hover:shadow-gold-500/20 transition-all duration-500 hover:-translate-y-2;
   }
   
   .font-serif {
     font-family: 'Playfair Display', serif;
+  }
+  
+  .gold-border {
+    @apply border border-gold-500/40 hover:border-gold-500/70 transition-all duration-300;
+  }
+  
+  .animated-bg {
+    @apply relative overflow-hidden;
+  }
+  
+  .animated-bg::before {
+    content: '';
+    @apply absolute w-[200%] h-[200%] top-[-50%] left-[-50%] bg-[radial-gradient(circle,_rgba(243,190,78,0.08)_0%,_transparent_70%)] animate-slow-spin opacity-60;
   }
 }
 
@@ -83,4 +97,44 @@
   background: linear-gradient(90deg, transparent, rgba(228, 178, 65, 0.2), transparent);
   background-size: 200% 100%;
   animation: shine 3s infinite;
+}
+
+.gold-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.gold-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(228, 178, 65, 0.2), transparent);
+  background-size: 200% 100%;
+  animation: shine 3s infinite;
+}
+
+.parallax-bg {
+  transform: translateY(var(--scroll-y, 0));
+  transition: transform 0.1s ease-out;
+}
+
+.animated-gradient-border {
+  position: relative;
+}
+
+.animated-gradient-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  border-radius: inherit;
+  background: linear-gradient(90deg, theme('colors.gold.300'), theme('colors.gold.500'), theme('colors.gold.300')) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: shine 4s linear infinite;
+  background-size: 200% auto;
 }

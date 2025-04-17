@@ -42,15 +42,28 @@ const Services = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.1,
         delayChildren: 0.3
       }
     }
   };
 
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10
+      }
+    }
+  };
+
   return (
-    <section id="services" className="section bg-gradient-to-b from-charcoal-900 to-black py-24">
-      <div className="container">
+    <section id="services" className="section animated-bg">
+      <div className="container relative z-10">
         <motion.div 
           className="text-center max-w-2xl mx-auto mb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -58,10 +71,22 @@ const Services = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 font-serif">
-            <span className="luxury-gradient">Our Premium Services</span>
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="inline-block mb-4"
+          >
+            <span className="px-3 py-1 bg-gold-500/10 text-gold-400 rounded-full text-sm font-medium">
+              Elite Services
+            </span>
+          </motion.div>
+          
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 font-serif">
+            <span className="luxury-gradient gold-glow">Our Premium Services</span>
           </h2>
-          <p className="text-slate-300 text-lg">
+          <p className="text-gray-400 text-lg">
             Experience the epitome of dental care and advanced aesthetic treatments, 
             meticulously crafted to enhance your natural beauty.
           </p>
@@ -75,13 +100,22 @@ const Services = () => {
           viewport={{ once: true, margin: "-100px" }}
         >
           {services.map((service, index) => (
-            <ServiceCard 
+            <motion.div
               key={service.title}
-              icon={service.icon}
-              title={service.title}
-              description={service.description}
-              delay={0.1 * index}
-            />
+              variants={itemVariants}
+              whileHover={{ 
+                y: -10,
+                transition: { duration: 0.3 }
+              }}
+            >
+              <ServiceCard 
+                icon={service.icon}
+                title={service.title}
+                description={service.description}
+                delay={0.1 * index}
+                className="h-full"
+              />
+            </motion.div>
           ))}
         </motion.div>
       </div>
