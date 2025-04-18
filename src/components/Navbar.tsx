@@ -53,23 +53,22 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <div className="container flex items-center justify-between">
+      <div className="container flex items-center justify-center">
         <motion.a 
           href="#" 
-          className="flex items-center gap-2"
+          className="flex items-center justify-center"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <img 
             src="/lovable-uploads/9529c193-29a0-49f7-bac0-635dd55afc34.png" 
-            alt="El Baghdadi Dental Logo" 
+            alt="Dental Logo" 
             className="h-10 w-10"
           />
-          <span className="font-bold text-xl text-white font-serif">El Baghdadi <span className="text-gold-400">Dental</span></span>
         </motion.a>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center absolute right-8">
           <ul className="flex items-center gap-6">
             {navItems.map((item) => (
               <li key={item.name}>
@@ -106,7 +105,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation Toggle Button */}
         <motion.button 
-          className="md:hidden p-2 text-gold-400" 
+          className="md:hidden p-2 text-gold-400 absolute right-4" 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
