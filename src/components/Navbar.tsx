@@ -3,17 +3,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
       
-      // Determine which section is currently in view
       const sections = ["home", "services", "about", "testimonials", "contact"];
       const scrollPosition = window.scrollY + 100;
       
@@ -36,11 +38,11 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "Services", href: "#services" },
-    { name: "About", href: "#about" },
-    { name: "Testimonials", href: "#testimonials" },
-    { name: "Contact", href: "#contact" },
+    { name: t('nav.home'), href: "#home" },
+    { name: t('nav.services'), href: "#services" },
+    { name: t('nav.about'), href: "#about" },
+    { name: t('nav.testimonials'), href: "#testimonials" },
+    { name: t('nav.contact'), href: "#contact" },
   ];
 
   return (
@@ -67,8 +69,7 @@ const Navbar = () => {
           />
         </motion.a>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center">
+        <div className="hidden md:flex items-center gap-6">
           <ul className="flex items-center gap-6">
             {navItems.map((item) => (
               <li key={item.name}>
@@ -93,17 +94,17 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
+          <LanguageSwitcher />
           <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <Button asChild className="bg-gold-500 hover:bg-gold-600 text-black rounded-md">
-              <a href="#booking">Book Appointment</a>
+              <a href="#booking">{t('nav.book')}</a>
             </Button>
           </motion.div>
         </div>
 
-        {/* Mobile Navigation Toggle Button */}
         <motion.button 
           className="md:hidden p-2 text-gold-400 absolute right-4" 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -115,7 +116,6 @@ const Navbar = () => {
         </motion.button>
       </div>
 
-      {/* Mobile Navigation Menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div 
@@ -152,8 +152,11 @@ const Navbar = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: navItems.length * 0.1 }}
               >
+                <div className="flex justify-center mb-4">
+                  <LanguageSwitcher />
+                </div>
                 <Button asChild className="w-full bg-gold-500 hover:bg-gold-600 text-black">
-                  <a href="#booking" onClick={() => setIsMenuOpen(false)}>Book Appointment</a>
+                  <a href="#booking" onClick={() => setIsMenuOpen(false)}>{t('nav.book')}</a>
                 </Button>
               </motion.li>
             </ul>
