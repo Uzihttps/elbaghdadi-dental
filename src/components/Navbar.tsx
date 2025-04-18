@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Stethoscope } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -61,22 +60,11 @@ const Navbar = () => {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <div className="relative">
-            <Stethoscope className="h-8 w-8 text-gold-400" />
-            <motion.div 
-              className="absolute inset-0 bg-gold-400 rounded-full"
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ 
-                scale: [0.5, 1.5, 0.5], 
-                opacity: [0.3, 0, 0.3],
-              }}
-              transition={{ 
-                duration: 3, 
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-          </div>
+          <img 
+            src="/lovable-uploads/9529c193-29a0-49f7-bac0-635dd55afc34.png" 
+            alt="El Baghdadi Dental Logo" 
+            className="h-10 w-10"
+          />
           <span className="font-bold text-xl text-white font-serif">El Baghdadi <span className="text-gold-400">Dental</span></span>
         </motion.a>
 
