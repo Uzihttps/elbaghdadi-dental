@@ -63,7 +63,7 @@ const Navbar = () => {
           <img 
             src="/lovable-uploads/9529c193-29a0-49f7-bac0-635dd55afc34.png" 
             alt="Dental Logo" 
-            className="h-10 w-10"
+            className="h-20 w-20"
           />
         </motion.a>
 
