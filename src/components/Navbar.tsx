@@ -53,22 +53,22 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <div className="container flex items-center justify-center">
+      <div className="container flex items-center justify-between">
         <motion.a 
           href="#" 
-          className="flex items-center justify-center"
+          className="flex items-center justify-start"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <img 
             src="/lovable-uploads/9529c193-29a0-49f7-bac0-635dd55afc34.png" 
             alt="Dental Logo" 
-            className="h-20 w-20"
+            className="h-16 w-16 brightness-150 contrast-125 hover:brightness-175 transition-all duration-300"
           />
         </motion.a>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center absolute right-8">
+        <div className="hidden md:flex items-center">
           <ul className="flex items-center gap-6">
             {navItems.map((item) => (
               <li key={item.name}>
