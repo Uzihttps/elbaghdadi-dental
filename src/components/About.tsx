@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Check, Award, GraduationCap } from "lucide-react";
 
@@ -28,13 +27,13 @@ const About = () => {
               />
             </div>
             <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-dental-100 flex items-center justify-center">
-                  <span className="text-dental-600 font-bold text-lg">7+</span>
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-gold-50 flex items-center justify-center shadow-md">
+                  <span className="text-gold-600 font-bold text-2xl gold-glow">7+</span>
                 </div>
                 <div>
-                  <p className="text-sm text-slate-600">Years of</p>
-                  <p className="font-semibold text-slate-900">Experience</p>
+                  <p className="text-xs uppercase tracking-wider text-gold-500 font-semibold">Years of</p>
+                  <p className="font-bold text-xl text-charcoal-900 tracking-tight">Experience</p>
                 </div>
               </div>
             </div>
