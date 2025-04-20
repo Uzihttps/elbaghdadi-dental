@@ -1,11 +1,12 @@
+
 import { motion } from "framer-motion";
 import { Check, Award, GraduationCap } from "lucide-react";
 
 const About = () => {
   const achievements = [
-    { icon: GraduationCap, text: "Specialized in Advanced Aesthetics" },
+    { icon: GraduationCap, text: "Médecine dentaire en Russie" },
     { icon: Award, text: "7+ Years of Professional Experience" },
-    { icon: Check, text: "Certified in Latest Dental Technologies" },
+    { icon: Check, text: "Médecine esthétique (formation) en Russie / Italie / Egypt" },
   ];
 
   return (
