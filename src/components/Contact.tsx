@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { MapPin, Phone, Clock, Mail } from "lucide-react";
 import BookingForm from "./BookingForm";
@@ -64,8 +63,8 @@ const Contact = () => {
                 title="Exclusive Location" 
                 content={
                   <p className="text-gray-400">
-                    123 Luxury Avenue, Suite 456<br />
-                    City Center, 10001
+                    Rue Hassan 2 résidence Mary Ida<br />
+                    En face province
                   </p>
                 } 
               />
