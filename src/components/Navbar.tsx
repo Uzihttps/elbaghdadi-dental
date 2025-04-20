@@ -65,7 +65,7 @@ const Navbar = () => {
           <img 
             src="/lovable-uploads/9529c193-29a0-49f7-bac0-635dd55afc34.png" 
             alt="Dental Logo" 
-            className="h-16 w-16 brightness-150 contrast-125 hover:brightness-175 transition-all duration-300"
+            className="h-20 w-20 brightness-150 contrast-125 hover:brightness-175 transition-all duration-300"
           />
         </motion.a>
 

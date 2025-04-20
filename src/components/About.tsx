@@ -5,7 +5,7 @@ import { Check, Award, GraduationCap } from "lucide-react";
 const About = () => {
   const achievements = [
     { icon: GraduationCap, text: "Specialized in Advanced Aesthetics" },
-    { icon: Award, text: "10+ Years of Professional Experience" },
+    { icon: Award, text: "7+ Years of Professional Experience" },
     { icon: Check, text: "Certified in Latest Dental Technologies" },
   ];
 
@@ -30,7 +30,7 @@ const About = () => {
             <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-lg">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-dental-100 flex items-center justify-center">
-                  <span className="text-dental-600 font-bold text-lg">10+</span>
+                  <span className="text-dental-600 font-bold text-lg">7+</span>
                 </div>
                 <div>
                   <p className="text-sm text-slate-600">Years of</p>
@@ -47,13 +47,13 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900">About Dr. El Baghdadi</h2>
-            <p className="text-slate-600">
+            <h2 className="text-4xl md:text-5xl font-bold luxury-gradient">About Dr. El Baghdadi</h2>
+            <p className="text-white">
               Dr. El Baghdadi is a distinguished dentist and aesthetic medicine specialist, dedicated to providing 
               exceptional care that enhances both oral health and natural beauty. With over a decade of experience,
               Dr. El Baghdadi combines technical expertise with an artistic approach to create naturally beautiful results.
             </p>
-            <p className="text-slate-600">
+            <p className="text-white">
               After graduating with honors in dental medicine, Dr. El Baghdadi pursued advanced training in aesthetic 
               procedures, including Botox administration and facial rejuvenation techniques. This unique combination 
               of skills allows for comprehensive treatment plans that address both dental concerns and aesthetic goals.
