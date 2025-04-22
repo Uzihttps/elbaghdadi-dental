@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Check, Award, GraduationCap } from "lucide-react";
 
@@ -6,7 +5,11 @@ const About = () => {
   const achievements = [
     { icon: GraduationCap, text: "Médecine dentaire en Russie" },
     { icon: Award, text: "7+ Years of Professional Experience" },
-    { icon: Check, text: "Médecine esthétique (formation) en Russie / Italie / Egypt" },
+    { 
+      icon: Check, 
+      text: "Médecine esthétique (formation) en Russie / Italie / Egypt", 
+      highlightStyle: "text-white bg-gradient-to-r from-gold-400 to-gold-600 bg-clip-text text-transparent font-semibold" 
+    },
   ];
 
   return (
@@ -69,7 +72,9 @@ const About = () => {
                       <div className="w-10 h-10 rounded-full bg-dental-50 flex items-center justify-center">
                         <Icon className="h-5 w-5 text-dental-600" />
                       </div>
-                      <p className="text-slate-700">{achievement.text}</p>
+                      <p className={`text-slate-700 ${achievement.highlightStyle || ''}`}>
+                        {achievement.text}
+                      </p>
                     </div>
                   );
                 })}
