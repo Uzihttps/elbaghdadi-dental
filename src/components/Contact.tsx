@@ -71,13 +71,19 @@ const Contact = () => {
               
               <ContactInfo 
                 icon={Phone} 
-                title="Direct Line" 
+                title="Direct Lines" 
                 content={
-                  <p className="text-gray-400">
-                    <a href="tel:+212661338152" className="hover:text-gold-400 transition-colors">
-                      +212 (66) 133-8152
+                  <div className="text-gray-400 space-y-1">
+                    <a href="tel:0661338152" className="block hover:text-gold-400 transition-colors">
+                      0661 33 81 52
                     </a>
-                  </p>
+                    <a href="tel:0537403781" className="block hover:text-gold-400 transition-colors">
+                      05 37 40 37 81
+                    </a>
+                    <a href="tel:0690098938" className="block hover:text-gold-400 transition-colors">
+                      06 90 09 89 38
+                    </a>
+                  </div>
                 } 
               />
               
@@ -98,8 +104,9 @@ const Contact = () => {
                 title="Availability" 
                 content={
                   <div className="text-gray-400 space-y-1">
-                    <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
-                    <p>Saturday: 10:00 AM - 4:00 PM</p>
+                    <p>Monday - Friday: 9:30 AM - 1:00 PM</p>
+                    <p>Monday - Friday: 2:00 PM - 6:30 PM</p>
+                    <p>Saturday: 9:30 AM - 2:00 PM</p>
                     <p>Sunday: By appointment only</p>
                   </div>
                 } 
