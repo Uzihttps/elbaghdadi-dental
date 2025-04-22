@@ -3,8 +3,16 @@ import { Check, Award, GraduationCap } from "lucide-react";
 
 const About = () => {
   const achievements = [
-    { icon: GraduationCap, text: "Médecine dentaire en Russie" },
-    { icon: Award, text: "7+ Years of Professional Experience" },
+    { 
+      icon: GraduationCap, 
+      text: "Médecine dentaire en Russie",
+      highlightStyle: "text-gold-400 font-semibold"
+    },
+    { 
+      icon: Award, 
+      text: "7+ Years of Professional Experience",
+      highlightStyle: "text-gold-400 font-semibold"
+    },
     { 
       icon: Check, 
       text: "Médecine esthétique (formation) en Russie / Italie / Egypt", 
@@ -50,7 +58,7 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold luxury-gradient">About Dr. El Baghdadi</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-white">Achievements & Certifications</h2>
             <p className="text-white">
               Dr. El Baghdadi is a distinguished dentist and aesthetic medicine specialist, dedicated to providing 
               exceptional care that enhances both oral health and natural beauty. With over a decade of experience,
