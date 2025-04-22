@@ -74,8 +74,8 @@ const Contact = () => {
                 title="Direct Line" 
                 content={
                   <p className="text-gray-400">
-                    <a href="tel:+1234567890" className="hover:text-gold-400 transition-colors">
-                      +1 (234) 567-890
+                    <a href="tel:+212661338152" className="hover:text-gold-400 transition-colors">
+                      +212 (66) 133-8152
                     </a>
                   </p>
                 } 
