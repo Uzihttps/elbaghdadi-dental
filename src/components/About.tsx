@@ -1,7 +1,11 @@
+
 import { motion } from "framer-motion";
 import { Check, Award, GraduationCap } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const About = () => {
+  const { t } = useLanguage();
+  
   const achievements = [
     { 
       icon: GraduationCap, 
@@ -44,8 +48,8 @@ const About = () => {
                   <span className="text-gold-600 font-bold text-2xl gold-glow">7+</span>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wider text-gold-500 font-semibold">Years of</p>
-                  <p className="font-bold text-xl text-charcoal-900 tracking-tight">Experience</p>
+                  <p className="text-xs uppercase tracking-wider text-gold-500 font-semibold">{t('about.exp')}</p>
+                  <p className="font-bold text-xl text-charcoal-900 tracking-tight">{t('about.experience')}</p>
                 </div>
               </div>
             </div>
@@ -58,20 +62,14 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white">Achievements & Certifications</h2>
-            <p className="text-white">
-              Dr. El Baghdadi is a distinguished dentist and aesthetic medicine specialist, dedicated to providing 
-              exceptional care that enhances both oral health and natural beauty. With over a decade of experience,
-              Dr. El Baghdadi combines technical expertise with an artistic approach to create naturally beautiful results.
-            </p>
-            <p className="text-white">
-              After graduating with honors in dental medicine, Dr. El Baghdadi pursued advanced training in aesthetic 
-              procedures, including Botox administration and facial rejuvenation techniques. This unique combination 
-              of skills allows for comprehensive treatment plans that address both dental concerns and aesthetic goals.
-            </p>
+            <h2 className="text-4xl md:text-5xl font-bold text-white">{t('about.title')}</h2>
+            <p className="text-white">{t('about.description1')}</p>
+            <p className="text-white">{t('about.description2')}</p>
+            <p className="text-white">{t('about.education')}</p>
+            <p className="text-white">{t('about.unique')}</p>
             
             <div className="pt-2">
-              <h3 className="font-semibold text-slate-800 mb-3">Achievements & Certifications</h3>
+              <h3 className="font-semibold text-white mb-3">{t('about.achievements')}</h3>
               <div className="space-y-3">
                 {achievements.map((achievement, index) => {
                   const Icon = achievement.icon;
@@ -96,3 +94,4 @@ const About = () => {
 };
 
 export default About;
+
