@@ -1,5 +1,5 @@
 
-import { Stethoscope, Instagram, Facebook, Twitter } from "lucide-react";
+import { Instagram, Facebook, Twitter } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Footer = () => {
@@ -47,8 +47,11 @@ const Footer = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <Stethoscope className="h-8 w-8 text-gold-400" />
-              <span className="font-bold text-xl text-white">El Baghdadi Dental</span>
+              <img 
+                src="/lovable-uploads/9529c193-29a0-49f7-bac0-635dd55afc34.png" 
+                alt="El Baghdadi Dental Logo" 
+                className="h-12 w-12 object-contain"
+              />
             </div>
             <p className="mb-6">
               Comprehensive dental care and aesthetic treatments for a beautiful smile and enhanced natural appearance.
