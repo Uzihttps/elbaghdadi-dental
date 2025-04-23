@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { Check, Award, GraduationCap } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
@@ -10,17 +9,17 @@ const About = () => {
     { 
       icon: GraduationCap, 
       text: "Médecine dentaire en Russie",
-      highlightStyle: "text-gold-400 font-semibold"
+      highlightStyle: "text-white"
     },
     { 
       icon: Award, 
       text: "7+ Years of Professional Experience",
-      highlightStyle: "text-gold-400 font-semibold"
+      highlightStyle: "text-white"
     },
     { 
       icon: Check, 
       text: "Médecine esthétique (formation) en Russie / Italie / Egypt", 
-      highlightStyle: "text-white bg-gradient-to-r from-gold-400 to-gold-600 bg-clip-text text-transparent font-semibold" 
+      highlightStyle: "text-white" 
     },
   ];
 
@@ -62,7 +61,7 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-white">{t('about.title')}</h2>
+            <h2 className="text-4xl md:text-5xl font-bold gold-gradient">{t('about.title')}</h2>
             <p className="text-white">{t('about.description1')}</p>
             <p className="text-white">{t('about.description2')}</p>
             <p className="text-white">{t('about.education')}</p>
@@ -78,7 +77,7 @@ const About = () => {
                       <div className="w-10 h-10 rounded-full bg-dental-50 flex items-center justify-center">
                         <Icon className="h-5 w-5 text-dental-600" />
                       </div>
-                      <p className={`text-slate-700 ${achievement.highlightStyle || ''}`}>
+                      <p className={`text-slate-700 ${achievement.highlightStyle}`}>
                         {achievement.text}
                       </p>
                     </div>
@@ -94,4 +93,3 @@ const About = () => {
 };
 
 export default About;
-
