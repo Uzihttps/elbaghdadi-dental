@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 type Language = 'en' | 'fr';
 
@@ -38,6 +38,16 @@ const translations = {
     'services.skin': 'Skin Boosters',
     'services.smile': 'Smile Makeover',
     'services.facial': 'Facial Contouring',
+    
+    // About
+    'about.title': 'Achievements & Certifications',
+    'about.description1': 'Dr. El Baghdadi is a distinguished dentist and aesthetic medicine specialist, dedicated to providing exceptional care that enhances both oral health and natural beauty.',
+    'about.description2': 'With over a decade of experience, Dr. El Baghdadi combines technical expertise with an artistic approach to create naturally beautiful results.',
+    'about.education': 'After graduating with honors in dental medicine, Dr. El Baghdadi pursued advanced training in aesthetic procedures, including Botox administration and facial rejuvenation techniques.',
+    'about.unique': 'This unique combination of skills allows for comprehensive treatment plans that address both dental concerns and aesthetic goals.',
+    'about.achievements': 'Achievements & Certifications',
+    'about.exp': 'Years of',
+    'about.experience': 'Experience',
   },
   fr: {
     // Navigation
@@ -67,16 +77,36 @@ const translations = {
     'services.skin': 'Boosters Cutanés',
     'services.smile': 'Transformation du Sourire',
     'services.facial': 'Contours du Visage',
+    
+    // About
+    'about.title': 'Réalisations & Certifications',
+    'about.description1': 'Dr. El Baghdadi est un dentiste et spécialiste en médecine esthétique distingué, dévoué à fournir des soins exceptionnels qui améliorent la santé bucco-dentaire et la beauté naturelle.',
+    'about.description2': 'Avec plus de dix ans d\'expérience, Dr. El Baghdadi combine expertise technique et approche artistique pour créer des résultats naturellement beaux.',
+    'about.education': 'Après avoir obtenu son diplôme avec mention en médecine dentaire, Dr. El Baghdadi a poursuivi une formation avancée en procédures esthétiques, y compris l\'administration de Botox et les techniques de rajeunissement facial.',
+    'about.unique': 'Cette combinaison unique de compétences permet d\'établir des plans de traitement complets qui répondent à la fois aux préoccupations dentaires et aux objectifs esthétiques.',
+    'about.achievements': 'Réalisations & Certifications',
+    'about.exp': 'Années d\'',
+    'about.experience': 'Expérience',
   }
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
-  const [language, setLanguage] = useState<Language>('en');
+  // Try to get stored language from localStorage, default to 'en'
+  const [language, setLanguage] = useState<Language>(() => {
+    const savedLanguage = localStorage.getItem('preferredLanguage');
+    return (savedLanguage === 'en' || savedLanguage === 'fr') ? savedLanguage : 'en';
+  });
+
+  // Save language preference to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('preferredLanguage', language);
+  }, [language]);
 
   const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations['en']] || key;
+    const langTranslations = translations[language];
+    return langTranslations[key as keyof typeof langTranslations] || key;
   };
 
   return (
