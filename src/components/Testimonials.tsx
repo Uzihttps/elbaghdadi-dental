@@ -1,29 +1,38 @@
 
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Testimonials = () => {
+  const { t, language } = useLanguage();
+  
   const testimonials = [
     {
-      name: "Sarah L.",
-      service: "Dental Implants & Botox",
-      quote: "Dr. El Baghdadi truly changed my life. Not only did he restore my smile with implants, but he also helped me look years younger with Botox. The results are natural and beautiful!",
+      name: "A P",
+      service: language === 'fr' ? "Traitement dentaire" : "Dental Treatment",
+      quote: language === 'fr' 
+        ? "J'ai eu la chance de trouver un excellent dentiste, le Dr El Baghdadi qui utilise des techniques modernes et efficaces. Je le recommande vivement."
+        : "I was fortunate to find an excellent dentist, Dr El Baghdadi who uses modern and effective techniques. I highly recommend him.",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
+      image: "https://lh3.googleusercontent.com/a/ACg8ocJFjqPEnB4tS1EuZe6oDtPu5VI-UKjIcgfpuVEU3Hph=w36-h36-p-rp-mo-br100"
     },
     {
-      name: "Michael T.",
-      service: "Smile Makeover",
-      quote: "I was always self-conscious about my smile. Dr. El Baghdadi listened to my concerns and created a personalized treatment plan. I can't stop smiling now!",
+      name: "Amin Ranya",
+      service: language === 'fr' ? "Soins dentaires" : "Dental Care",
+      quote: language === 'fr'
+        ? "Un docteur très professionnel avec des années d'expérience. Je recommande vivement!"
+        : "A very professional doctor with years of experience. I highly recommend!",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
+      image: "https://lh3.googleusercontent.com/a/ACg8ocJNAh4C43bfRWbiFJFnaXUlFoZaYUUX9lXs5fQ9pKjL=w36-h36-p-rp-mo-br100"
     },
     {
-      name: "Amina K.",
-      service: "Skin Boosters & Teeth Whitening",
-      quote: "The combination of dental and aesthetic treatments makes this clinic unique. I love the convenience of getting everything done in one place, and the results speak for themselves.",
+      name: "Youssef Benkhalifa",
+      service: language === 'fr' ? "Traitement esthétique" : "Aesthetic Treatment",
+      quote: language === 'fr'
+        ? "Professional, à l'écoute et très compétent"
+        : "Professional, attentive and very competent",
       rating: 5,
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&q=80"
+      image: "https://lh3.googleusercontent.com/a/ACg8ocLqI1IZHRe2Zj17vTc0xKjUEaIaAVVxhH5fQ5P2gXgG=w36-h36-p-rp-mo-br100"
     }
   ];
 
