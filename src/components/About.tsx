@@ -36,7 +36,7 @@ const About = () => {
           >
             <div className="aspect-square rounded-2xl overflow-hidden">
               <img 
-                src="/lovable-uploads/0694cb84-cb78-4a99-8c8a-fbc71dfd996f.png" 
+                src="/lovable-uploads/[User uploaded image filename will be here]" 
                 alt="Dr. El Baghdadi" 
                 className="w-full h-full object-cover"
               />
