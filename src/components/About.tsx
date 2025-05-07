@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Check, Award, GraduationCap } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
@@ -36,7 +37,7 @@ const About = () => {
           >
             <div className="aspect-square rounded-2xl overflow-hidden">
               <img 
-                src="/lovable-uploads/[User uploaded image filename will be here]" 
+                src="/lovable-uploads/0694cb84-cb78-4a99-8c8a-fbc71dfd996f.png" 
                 alt="Dr. El Baghdadi" 
                 className="w-full h-full object-cover"
               />
