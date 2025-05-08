@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, Clock, Users, CheckCircle, Smile } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, Users, CheckCircle, Smile, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -31,6 +31,8 @@ const TIME_SLOTS = [
   { time: "3:00 PM", label: "Afternoon - 3:00 PM" },
   { time: "4:00 PM", label: "Afternoon - 4:00 PM" }
 ];
+
+const WHATSAPP_NUMBER = "212700485873"; // WhatsApp number without the + symbol
 
 const BookingForm = () => {
   const { toast } = useToast();
@@ -79,6 +81,19 @@ const BookingForm = () => {
     });
   };
 
+  const generateWhatsAppMessage = () => {
+    const formattedDate = date ? format(date, "EEEE, MMMM d, yyyy") : "";
+    return encodeURIComponent(
+      `*New Appointment*\n` +
+      `*Name:* ${name}\n` +
+      `*Email:* ${email}\n` +
+      `*Phone:* ${phone}\n` +
+      `*Date:* ${formattedDate}\n` +
+      `*Time:* ${timeSlot}\n` +
+      `*Service:* ${service}`
+    );
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -93,7 +108,7 @@ const BookingForm = () => {
         description: `We're excited to see you on ${date ? format(date, "EEEE, MMMM d") : ""} at ${timeSlot}.`,
       });
       
-      // Reset form after 3 seconds
+      // Reset form after 5 seconds
       setTimeout(() => {
         setIsSuccess(false);
         setName("");
@@ -105,6 +120,12 @@ const BookingForm = () => {
         setStep(1);
       }, 5000);
     }, 1500);
+  };
+
+  const openWhatsApp = () => {
+    const message = generateWhatsAppMessage();
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   const services = [
@@ -172,7 +193,7 @@ const BookingForm = () => {
           </div>
           <h4 className="text-xl font-semibold text-white mb-2">Thank You!</h4>
           <p className="text-gray-400 mb-4">Your appointment has been confirmed. We'll see you soon!</p>
-          <div className="bg-gray-900 p-4 rounded-lg border border-gold-500/20">
+          <div className="bg-gray-900 p-4 rounded-lg border border-gold-500/20 mb-4">
             <div className="flex items-center justify-center gap-2 mb-2">
               <CalendarIcon className="w-4 h-4 text-gold-400" />
               <span className="text-white">{formattedDate}</span>
@@ -186,6 +207,14 @@ const BookingForm = () => {
               <span className="text-white">{service}</span>
             </div>
           </div>
+          
+          <Button 
+            onClick={openWhatsApp} 
+            className="flex items-center justify-center gap-2 w-full bg-green-600 hover:bg-green-700 text-white"
+          >
+            <MessageCircle className="w-5 h-5" />
+            Send Details to WhatsApp
+          </Button>
         </motion.div>
       ) : (
         <AnimatePresence mode="wait">
