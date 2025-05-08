@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { Check, Award, GraduationCap } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { AspectRatio } from "./ui/aspect-ratio";
 
 const About = () => {
   const { t } = useLanguage();
@@ -29,18 +30,20 @@ const About = () => {
       <div className="container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div 
-            className="relative"
+            className="relative mx-auto w-4/5 lg:w-full"
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="aspect-square rounded-2xl overflow-hidden">
-              <img 
-                src="/lovable-uploads/64b5b7f7-57a3-4e04-ba97-bb31fba6545d.png" 
-                alt="Dr. El Baghdadi performing a dental procedure" 
-                className="w-full h-full object-cover"
-              />
+            <div className="rounded-2xl overflow-hidden">
+              <AspectRatio ratio={1/1} className="w-full">
+                <img 
+                  src="/lovable-uploads/64b5b7f7-57a3-4e04-ba97-bb31fba6545d.png" 
+                  alt="Dr. El Baghdadi performing a dental procedure" 
+                  className="w-full h-full object-cover"
+                />
+              </AspectRatio>
             </div>
             <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-lg">
               <div className="flex items-center gap-4">
