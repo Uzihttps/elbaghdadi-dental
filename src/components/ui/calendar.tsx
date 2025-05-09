@@ -21,11 +21,12 @@ function Calendar({
   // Use French locale for day names when the language is set to French
   const locale = language === 'fr' ? fr : undefined;
   
-  // Custom formatting for day names in French
+  // Custom formatting for day names in French using the proper Formatters type
   const formatters = language === 'fr' ? {
-    formatWeekday: (weekday: Date) => {
-      const day = weekday.getDay();
-      const frenchDays = ['di', 'lu', 'ma', 'me', 'je', 've', 'sa'];
+    formatWeekdayName: (date: Date) => {
+      const day = date.getDay();
+      // Full French day names
+      const frenchDays = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
       return frenchDays[day];
     }
   } : undefined;
