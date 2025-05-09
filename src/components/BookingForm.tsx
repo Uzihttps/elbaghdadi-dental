@@ -1,21 +1,29 @@
-
 import { useState } from "react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { Smile } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, Users, CheckCircle, Smile, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/context/LanguageContext";
-import { sendEmailNotification, generateWhatsAppMessage } from "@/services/emailService";
-
-// Step components
-import DateSelection from "@/components/booking/DateSelection";
-import TimeSelection from "@/components/booking/TimeSelection";
-import PersonalDetails from "@/components/booking/PersonalDetails";
-import ServiceSelection from "@/components/booking/ServiceSelection";
-import SuccessView from "@/components/booking/SuccessView";
 
 const WHATSAPP_NUMBER = "212700485873"; // WhatsApp number without the + symbol
+const EMAIL_RECIPIENT = "reevivetheagency@gmail.com";
 
 const BookingForm = () => {
   const { toast } = useToast();
@@ -30,6 +38,27 @@ const BookingForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // Generate time slots based on language
+  const TIME_SLOTS = [
+    { time: "9:00 AM", label: `${t('time.morning')} 9:00 AM` },
+    { time: "10:00 AM", label: `${t('time.morning')} 10:00 AM` },
+    { time: "11:00 AM", label: `${t('time.morning')} 11:00 AM` },
+    { time: "1:00 PM", label: `${t('time.afternoon')} 1:00 PM` },
+    { time: "2:00 PM", label: `${t('time.afternoon')} 2:00 PM` },
+    { time: "3:00 PM", label: `${t('time.afternoon')} 3:00 PM` },
+    { time: "4:00 PM", label: `${t('time.afternoon')} 4:00 PM` }
+  ];
+
+  // Services based on language
+  const services = [
+    t('service.luxury'),
+    t('service.premium'),
+    t('service.executive'),
+    t('service.vip'),
+    t('service.complete'),
+    t('service.elite')
+  ];
+
   const formatDateWithLocale = (date: Date) => {
     return format(
       date, 
@@ -42,44 +71,141 @@ const BookingForm = () => {
     setDate(selectedDate);
     if (selectedDate) {
       setStep(2);
+      
+      const formattedDate = selectedDate ? formatDateWithLocale(selectedDate) : "";
+      
+      // Show a friendly toast message
+      toast({
+        title: t('booking.greatChoice'),
+        description: t('booking.pickTime').replace('{date}', formattedDate),
+      });
     }
   };
 
   const handleTimeSelect = (time: string) => {
     setTimeSlot(time);
     setStep(3);
+    
+    // Show a friendly toast message
+    toast({
+      title: t('booking.perfect'),
+      description: t('booking.timeSelected').replace('{time}', time),
+    });
   };
 
   const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
     setStep(4);
     
+    // Show a friendly toast message
     toast({
       title: t('booking.almostDone'),
       description: t('booking.lastStep'),
     });
   };
 
+  const generateWhatsAppMessage = () => {
+    const formattedDate = date ? formatDateWithLocale(date) : "";
+    return encodeURIComponent(
+      `*New Appointment*\n` +
+      `*Name:* ${name}\n` +
+      `*Email:* ${email}\n` +
+      `*Phone:* ${phone}\n` +
+      `*Date:* ${formattedDate}\n` +
+      `*Time:* ${timeSlot}\n` +
+      `*Service:* ${service}`
+    );
+  };
+
+  const sendEmailNotification = async () => {
+    const formattedDate = date ? formatDateWithLocale(date) : "";
+    
+    try {
+      // Using EmailJS to send email
+      const emailjs = await import('emailjs-com');
+      
+      // EmailJS parameters - add your User ID, Service ID and Template ID
+      // These would normally be environment variables
+      const templateParams = {
+        to_email: EMAIL_RECIPIENT,
+        subject: `New Appointment Request - ${name}`,
+        message: `
+          New Appointment Details:
+          
+          Name: ${name}
+          Email: ${email}
+          Phone: ${phone}
+          Date: ${formattedDate}
+          Time: ${timeSlot}
+          Service: ${service}
+          
+          Please contact the client to confirm their appointment.
+        `,
+        from_name: name,
+        reply_to: email,
+        appointment_date: formattedDate,
+        appointment_time: timeSlot,
+        service: service,
+        phone: phone
+      };
+      
+      await emailjs.send(
+        'default_service',  // Replace with your EmailJS Service ID
+        'template_default', // Replace with your EmailJS Template ID 
+        templateParams,
+        'user_xxxxxxxxxxxx' // Replace with your EmailJS User ID
+      );
+      
+      console.log("Email notification sent successfully to", EMAIL_RECIPIENT);
+    } catch (error) {
+      console.error('Error sending email notification:', error);
+      // Still proceed with booking even if email fails
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    const formattedDate = date ? formatDateWithLocale(date) : "";
-    
     // Send email notification
-    sendEmailNotification({
-      name,
-      email,
-      phone,
-      date: formattedDate,
-      time: timeSlot || '',
-      service
-    });
+    sendEmailNotification();
+    
+    // Using fetch API as a backup method to send the email
+    const formattedDate = date ? formatDateWithLocale(date) : "";
+    const emailBody = `
+      New Appointment Details:
+      
+      Name: ${name}
+      Email: ${email}
+      Phone: ${phone}
+      Date: ${formattedDate}
+      Time: ${timeSlot}
+      Service: ${service}
+      
+      Please contact the client to confirm their appointment.
+    `;
+    
+    // Using a simple form submission to a serverless function or email service
+    fetch("https://formsubmit.co/" + EMAIL_RECIPIENT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        message: emailBody,
+        _subject: `New Appointment Request - ${name}`,
+      }),
+    }).catch(error => console.error("Form submission error:", error));
     
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSuccess(true);
+      
+      const formattedDate = date ? formatDateWithLocale(date) : "";
       
       toast({
         title: t('booking.appointmentConfirmed'),
@@ -103,18 +229,13 @@ const BookingForm = () => {
   };
 
   const openWhatsApp = () => {
-    const formattedDate = date ? formatDateWithLocale(date) : "";
-    const message = generateWhatsAppMessage({
-      name,
-      email,
-      phone,
-      date: formattedDate,
-      time: timeSlot,
-      service,
-    });
+    const message = generateWhatsAppMessage();
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
     window.open(whatsappUrl, '_blank');
   };
+
+  // Display a human-readable date format
+  const formattedDate = date ? formatDateWithLocale(date) : "";
 
   return (
     <motion.div 
@@ -138,11 +259,12 @@ const BookingForm = () => {
         {[1, 2, 3, 4].map((stepNumber) => (
           <div key={stepNumber} className="flex flex-col items-center">
             <div 
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+              className={cn(
+                "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors",
                 step >= stepNumber 
                   ? "bg-gold-500 text-black" 
                   : "bg-gray-800 text-gray-400"
-              }`}
+              )}
             >
               {stepNumber}
             </div>
@@ -157,12 +279,40 @@ const BookingForm = () => {
       </div>
       
       {isSuccess ? (
-        <SuccessView 
-          date={date}
-          timeSlot={timeSlot}
-          service={service}
-          onWhatsAppClick={openWhatsApp}
-        />
+        <motion.div 
+          className="py-8 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="mx-auto w-20 h-20 bg-gold-500/20 rounded-full flex items-center justify-center mb-6">
+            <CheckCircle className="w-10 h-10 text-gold-400" />
+          </div>
+          <h4 className="text-xl font-semibold text-white mb-2">{t('booking.thankYou')}</h4>
+          <p className="text-gray-400 mb-4">{t('booking.confirmed')}</p>
+          <div className="bg-gray-900 p-4 rounded-lg border border-gold-500/20 mb-4">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <CalendarIcon className="w-4 h-4 text-gold-400" />
+              <span className="text-white">{formattedDate}</span>
+            </div>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Clock className="w-4 h-4 text-gold-400" />
+              <span className="text-white">{timeSlot}</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <Users className="w-4 h-4 text-gold-400" />
+              <span className="text-white">{service}</span>
+            </div>
+          </div>
+          
+          <Button 
+            onClick={openWhatsApp} 
+            className="flex items-center justify-center gap-2 w-full bg-green-600 hover:bg-green-700 text-white"
+          >
+            <MessageCircle className="w-5 h-5" />
+            {t('booking.whatsapp')}
+          </Button>
+        </motion.div>
       ) : (
         <AnimatePresence mode="wait">
           {step === 1 && (
@@ -172,11 +322,32 @@ const BookingForm = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
+              className="space-y-5"
             >
-              <DateSelection 
-                date={date}
-                onDateSelect={handleDateSelect}
+              <h4 className="font-medium text-white flex items-center gap-2">
+                <CalendarIcon className="w-5 h-5 text-gold-400" /> 
+                {t('booking.chooseDay')}
+              </h4>
+              
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={handleDateSelect}
+                disabled={(date) => date < new Date() || date > new Date(new Date().setMonth(new Date().getMonth() + 2))}
+                className="p-3 bg-gray-900 border border-gold-500/20 rounded-lg text-white"
+                classNames={{
+                  day_selected: "bg-gold-500 text-black hover:bg-gold-600 hover:text-black focus:bg-gold-500 focus:text-black",
+                  day_today: "bg-gray-800 text-gold-400 font-bold",
+                  head_cell: "text-gold-500",
+                  button_reset: "text-gold-400 hover:text-gold-500"
+                }}
               />
+              
+              <div className="bg-gray-900/50 p-3 rounded-lg border border-gold-500/10">
+                <p className="text-gray-400 text-sm">
+                  {t('booking.dateHelp')}
+                </p>
+              </div>
             </motion.div>
           )}
 
@@ -187,13 +358,42 @@ const BookingForm = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.3 }}
+              className="space-y-5"
             >
-              <TimeSelection 
-                date={date}
-                timeSlot={timeSlot}
-                onTimeSelect={handleTimeSelect}
-                onPrevStep={() => setStep(1)}
-              />
+              <div className="mb-4">
+                <h4 className="font-medium text-white flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-gold-400" /> 
+                  {t('booking.chooseTime')}
+                </h4>
+                <p className="text-gray-400 text-sm mt-1">
+                  {t('booking.selectedDate')} <span className="text-gold-400">{formattedDate}</span>
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2">
+                {TIME_SLOTS.map((slot) => (
+                  <button
+                    key={slot.time}
+                    onClick={() => handleTimeSelect(slot.time)}
+                    className={cn(
+                      "p-3 rounded-lg border transition-all duration-300",
+                      timeSlot === slot.time 
+                        ? "border-gold-500 bg-gold-500/10 text-gold-400" 
+                        : "border-gray-700 hover:border-gold-500/50 text-gray-300 hover:text-white"
+                    )}
+                  >
+                    {slot.label}
+                  </button>
+                ))}
+              </div>
+
+              <Button
+                onClick={() => setStep(1)}
+                variant="outline"
+                className="w-full border-gray-700 text-gray-400 hover:text-white hover:border-gold-500/50 bg-transparent"
+              >
+                &larr; {t('booking.changeDate')}
+              </Button>
             </motion.div>
           )}
           
@@ -204,19 +404,74 @@ const BookingForm = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.3 }}
+              className="space-y-5"
             >
-              <PersonalDetails 
-                date={date}
-                timeSlot={timeSlot}
-                name={name}
-                email={email}
-                phone={phone}
-                onNameChange={setName}
-                onEmailChange={setEmail}
-                onPhoneChange={setPhone}
-                onPrevStep={() => setStep(2)}
-                onNextStep={handleNextStep}
-              />
+              <div className="mb-4">
+                <h4 className="font-medium text-white flex items-center gap-2">
+                  <Users className="w-5 h-5 text-gold-400" /> 
+                  {t('booking.yourInfo')}
+                </h4>
+                <p className="text-gray-400 text-sm mt-1">
+                  {t('booking.appointment')} <span className="text-gold-400">{formattedDate} at {timeSlot}</span>
+                </p>
+              </div>
+              
+              <form onSubmit={handleNextStep} className="space-y-4">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">{t('booking.name')}</label>
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder={t('booking.name')}
+                    required
+                    className="bg-gray-900 border-gray-700 text-white focus:border-gold-500/50"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">{t('booking.email')}</label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={t('booking.email')}
+                    required
+                    className="bg-gray-900 border-gray-700 text-white focus:border-gold-500/50"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">{t('booking.phone')}</label>
+                  <Input
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder={t('booking.phone')}
+                    required
+                    className="bg-gray-900 border-gray-700 text-white focus:border-gold-500/50"
+                  />
+                </div>
+                
+                <div className="flex gap-2 pt-2">
+                  <Button
+                    type="button"
+                    onClick={() => setStep(2)}
+                    variant="outline"
+                    className="flex-1 border-gray-700 text-gray-400 hover:text-white hover:border-gold-500/50 bg-transparent"
+                  >
+                    &larr; {t('booking.back')}
+                  </Button>
+                  
+                  <Button
+                    type="submit"
+                    className="flex-1 bg-gradient-to-r from-gold-400 to-gold-600 hover:from-gold-500 hover:to-gold-700 text-black"
+                  >
+                    {t('booking.continue')} &rarr;
+                  </Button>
+                </div>
+              </form>
             </motion.div>
           )}
           
@@ -227,17 +482,69 @@ const BookingForm = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.3 }}
+              className="space-y-5"
             >
-              <ServiceSelection 
-                date={date}
-                timeSlot={timeSlot}
-                name={name}
-                service={service}
-                isSubmitting={isSubmitting}
-                onServiceChange={setService}
-                onPrevStep={() => setStep(3)}
-                onSubmit={handleSubmit}
-              />
+              <div className="mb-4">
+                <h4 className="font-medium text-white flex items-center gap-2">
+                  <Smile className="w-5 h-5 text-gold-400" /> 
+                  {t('booking.selectTreatment')}
+                </h4>
+                <p className="text-gray-400 text-sm mt-1">
+                  {t('booking.finalStep')}
+                </p>
+              </div>
+              
+              <div className="bg-gray-900 p-4 rounded-lg border border-gold-500/20 mb-5">
+                <div className="flex items-center gap-2 mb-2">
+                  <CalendarIcon className="w-4 h-4 text-gold-400" />
+                  <span className="text-white">{formattedDate}</span>
+                </div>
+                <div className="flex items-center gap-2 mb-2">
+                  <Clock className="w-4 h-4 text-gold-400" />
+                  <span className="text-white">{timeSlot}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-gold-400" />
+                  <span className="text-white">{name}</span>
+                </div>
+              </div>
+              
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="service" className="block text-sm font-medium text-gray-300 mb-1">{t('booking.selectTreatment')}</label>
+                  <Select value={service} onValueChange={setService} required>
+                    <SelectTrigger id="service" className="w-full bg-gray-900 border-gray-700 text-white focus:border-gold-500/50">
+                      <SelectValue placeholder={t('booking.chooseService')} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-900 border-gold-500/20 text-white">
+                      {services.map((item) => (
+                        <SelectItem key={item} value={item} className="hover:bg-gray-800 focus:bg-gray-800">
+                          {item}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex gap-2 pt-2">
+                  <Button
+                    type="button"
+                    onClick={() => setStep(3)}
+                    variant="outline"
+                    className="flex-1 border-gray-700 text-gray-400 hover:text-white hover:border-gold-500/50 bg-transparent"
+                  >
+                    &larr; {t('booking.back')}
+                  </Button>
+                  
+                  <Button
+                    type="submit"
+                    className="flex-1 bg-gradient-to-r from-gold-400 to-gold-600 hover:from-gold-500 hover:to-gold-700 text-black"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? t('booking.confirming') : t('booking.completeBooking')}
+                  </Button>
+                </div>
+              </form>
             </motion.div>
           )}
         </AnimatePresence>
