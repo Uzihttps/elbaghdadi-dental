@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -122,33 +121,45 @@ const BookingForm = () => {
     const formattedDate = date ? formatDateWithLocale(date) : "";
     
     try {
-      const formData = new FormData();
-      formData.append('to', EMAIL_RECIPIENT);
-      formData.append('subject', `New Appointment Request - ${name}`);
-      formData.append('message', `
-        New Appointment Details:
-        
-        Name: ${name}
-        Email: ${email}
-        Phone: ${phone}
-        Date: ${formattedDate}
-        Time: ${timeSlot}
-        Service: ${service}
-        
-        Please contact the client to confirm their appointment.
-      `);
+      // Using EmailJS to send email
+      const emailjs = await import('emailjs-com');
       
-      // Using a public email sending API (EmailJS)
-      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send-form', {
-        method: 'POST',
-        body: formData,
-      });
+      // EmailJS parameters - add your User ID, Service ID and Template ID
+      // These would normally be environment variables
+      const templateParams = {
+        to_email: EMAIL_RECIPIENT,
+        subject: `New Appointment Request - ${name}`,
+        message: `
+          New Appointment Details:
+          
+          Name: ${name}
+          Email: ${email}
+          Phone: ${phone}
+          Date: ${formattedDate}
+          Time: ${timeSlot}
+          Service: ${service}
+          
+          Please contact the client to confirm their appointment.
+        `,
+        from_name: name,
+        reply_to: email,
+        appointment_date: formattedDate,
+        appointment_time: timeSlot,
+        service: service,
+        phone: phone
+      };
       
-      if (!response.ok) {
-        console.error('Email notification failed');
-      }
+      await emailjs.send(
+        'default_service',  // Replace with your EmailJS Service ID
+        'template_default', // Replace with your EmailJS Template ID 
+        templateParams,
+        'user_xxxxxxxxxxxx' // Replace with your EmailJS User ID
+      );
+      
+      console.log("Email notification sent successfully to", EMAIL_RECIPIENT);
     } catch (error) {
       console.error('Error sending email notification:', error);
+      // Still proceed with booking even if email fails
     }
   };
 
@@ -158,6 +169,36 @@ const BookingForm = () => {
     
     // Send email notification
     sendEmailNotification();
+    
+    // Using fetch API as a backup method to send the email
+    const formattedDate = date ? formatDateWithLocale(date) : "";
+    const emailBody = `
+      New Appointment Details:
+      
+      Name: ${name}
+      Email: ${email}
+      Phone: ${phone}
+      Date: ${formattedDate}
+      Time: ${timeSlot}
+      Service: ${service}
+      
+      Please contact the client to confirm their appointment.
+    `;
+    
+    // Using a simple form submission to a serverless function or email service
+    fetch("https://formsubmit.co/" + EMAIL_RECIPIENT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        message: emailBody,
+        _subject: `New Appointment Request - ${name}`,
+      }),
+    }).catch(error => console.error("Form submission error:", error));
     
     // Simulate API call
     setTimeout(() => {
@@ -294,7 +335,6 @@ const BookingForm = () => {
                 onSelect={handleDateSelect}
                 disabled={(date) => date < new Date() || date > new Date(new Date().setMonth(new Date().getMonth() + 2))}
                 className="p-3 bg-gray-900 border border-gold-500/20 rounded-lg text-white"
-                locale={language === 'fr' ? fr : undefined}
                 classNames={{
                   day_selected: "bg-gold-500 text-black hover:bg-gold-600 hover:text-black focus:bg-gold-500 focus:text-black",
                   day_today: "bg-gray-800 text-gold-400 font-bold",

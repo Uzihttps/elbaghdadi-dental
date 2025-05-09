@@ -1,9 +1,12 @@
+
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { DayPicker } from "react-day-picker";
+import { fr } from "date-fns/locale";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { useLanguage } from "@/context/LanguageContext";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -13,10 +16,26 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const { language } = useLanguage();
+  
+  // Use French locale for day names when the language is set to French
+  const locale = language === 'fr' ? fr : undefined;
+  
+  // Custom formatting for day names in French
+  const formatters = language === 'fr' ? {
+    formatWeekdayName: (weekday: Date) => {
+      const day = weekday.getDay();
+      const frenchDays = ['di', 'lu', 'ma', 'me', 'je', 've', 'sa'];
+      return frenchDays[day];
+    }
+  } : undefined;
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn("p-3", className)}
+      className={cn("p-3 pointer-events-auto", className)}
+      locale={locale}
+      formatters={formatters}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
