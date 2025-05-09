@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { Calendar as CalendarIcon, Clock, Users, CheckCircle, Smile, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -20,22 +21,14 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-
-// Available time slots for the selected date with friendly labels
-const TIME_SLOTS = [
-  { time: "9:00 AM", label: "Morning - 9:00 AM" },
-  { time: "10:00 AM", label: "Morning - 10:00 AM" },
-  { time: "11:00 AM", label: "Morning - 11:00 AM" },
-  { time: "1:00 PM", label: "Afternoon - 1:00 PM" },
-  { time: "2:00 PM", label: "Afternoon - 2:00 PM" },
-  { time: "3:00 PM", label: "Afternoon - 3:00 PM" },
-  { time: "4:00 PM", label: "Afternoon - 4:00 PM" }
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 const WHATSAPP_NUMBER = "212700485873"; // WhatsApp number without the + symbol
+const EMAIL_RECIPIENT = "reevivetheagency@gmail.com";
 
 const BookingForm = () => {
   const { toast } = useToast();
+  const { t, language } = useLanguage();
   const [step, setStep] = useState(1);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [timeSlot, setTimeSlot] = useState<string | undefined>(undefined);
@@ -46,15 +39,46 @@ const BookingForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // Generate time slots based on language
+  const TIME_SLOTS = [
+    { time: "9:00 AM", label: `${t('time.morning')} 9:00 AM` },
+    { time: "10:00 AM", label: `${t('time.morning')} 10:00 AM` },
+    { time: "11:00 AM", label: `${t('time.morning')} 11:00 AM` },
+    { time: "1:00 PM", label: `${t('time.afternoon')} 1:00 PM` },
+    { time: "2:00 PM", label: `${t('time.afternoon')} 2:00 PM` },
+    { time: "3:00 PM", label: `${t('time.afternoon')} 3:00 PM` },
+    { time: "4:00 PM", label: `${t('time.afternoon')} 4:00 PM` }
+  ];
+
+  // Services based on language
+  const services = [
+    t('service.luxury'),
+    t('service.premium'),
+    t('service.executive'),
+    t('service.vip'),
+    t('service.complete'),
+    t('service.elite')
+  ];
+
+  const formatDateWithLocale = (date: Date) => {
+    return format(
+      date, 
+      "EEEE, MMMM d, yyyy", 
+      { locale: language === 'fr' ? fr : undefined }
+    );
+  };
+
   const handleDateSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate);
     if (selectedDate) {
       setStep(2);
       
+      const formattedDate = selectedDate ? formatDateWithLocale(selectedDate) : "";
+      
       // Show a friendly toast message
       toast({
-        title: "Great choice!",
-        description: `You've selected ${format(selectedDate, "EEEE, MMMM d")}. Now pick a time that works best for you.`,
+        title: t('booking.greatChoice'),
+        description: t('booking.pickTime').replace('{date}', formattedDate),
       });
     }
   };
@@ -65,8 +89,8 @@ const BookingForm = () => {
     
     // Show a friendly toast message
     toast({
-      title: "Perfect!",
-      description: `You've selected ${time}. Now let's get your contact information.`,
+      title: t('booking.perfect'),
+      description: t('booking.timeSelected').replace('{time}', time),
     });
   };
 
@@ -76,13 +100,13 @@ const BookingForm = () => {
     
     // Show a friendly toast message
     toast({
-      title: "Almost done!",
-      description: "Just one last step - let's pick the service you're interested in.",
+      title: t('booking.almostDone'),
+      description: t('booking.lastStep'),
     });
   };
 
   const generateWhatsAppMessage = () => {
-    const formattedDate = date ? format(date, "EEEE, MMMM d, yyyy") : "";
+    const formattedDate = date ? formatDateWithLocale(date) : "";
     return encodeURIComponent(
       `*New Appointment*\n` +
       `*Name:* ${name}\n` +
@@ -94,18 +118,59 @@ const BookingForm = () => {
     );
   };
 
+  const sendEmailNotification = async () => {
+    const formattedDate = date ? formatDateWithLocale(date) : "";
+    
+    try {
+      const formData = new FormData();
+      formData.append('to', EMAIL_RECIPIENT);
+      formData.append('subject', `New Appointment Request - ${name}`);
+      formData.append('message', `
+        New Appointment Details:
+        
+        Name: ${name}
+        Email: ${email}
+        Phone: ${phone}
+        Date: ${formattedDate}
+        Time: ${timeSlot}
+        Service: ${service}
+        
+        Please contact the client to confirm their appointment.
+      `);
+      
+      // Using a public email sending API (EmailJS)
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send-form', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        console.error('Email notification failed');
+      }
+    } catch (error) {
+      console.error('Error sending email notification:', error);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    // Send email notification
+    sendEmailNotification();
     
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSuccess(true);
       
+      const formattedDate = date ? formatDateWithLocale(date) : "";
+      
       toast({
-        title: "Wonderful! Your appointment is confirmed",
-        description: `We're excited to see you on ${date ? format(date, "EEEE, MMMM d") : ""} at ${timeSlot}.`,
+        title: t('booking.appointmentConfirmed'),
+        description: t('booking.seeYou')
+          .replace('{date}', formattedDate)
+          .replace('{time}', timeSlot || ''),
       });
       
       // Reset form after 5 seconds
@@ -128,17 +193,8 @@ const BookingForm = () => {
     window.open(whatsappUrl, '_blank');
   };
 
-  const services = [
-    "Luxury Dental Consultation",
-    "Premium Cosmetic Dentistry",
-    "Executive Botox Treatment",
-    "VIP Skin Boosters",
-    "Complete Smile Makeover",
-    "Elite Facial Contouring"
-  ];
-
   // Display a human-readable date format
-  const formattedDate = date ? format(date, "EEEE, MMMM d, yyyy") : "";
+  const formattedDate = date ? formatDateWithLocale(date) : "";
 
   return (
     <motion.div 
@@ -151,10 +207,10 @@ const BookingForm = () => {
       {/* Header with friendly message */}
       <div className="border-b border-gold-500/20 pb-5 mb-6">
         <div className="flex items-center gap-3 mb-2">
-          <h3 className="text-2xl font-bold gold-gradient">Book Your Visit</h3>
+          <h3 className="text-2xl font-bold gold-gradient">{t('booking.title')}</h3>
           <Smile className="h-5 w-5 text-gold-400" />
         </div>
-        <p className="text-gray-400 mt-1">We're looking forward to seeing you soon!</p>
+        <p className="text-gray-400 mt-1">{t('booking.subtitle')}</p>
       </div>
 
       {/* Progress indicator */}
@@ -172,10 +228,10 @@ const BookingForm = () => {
               {stepNumber}
             </div>
             <span className="text-xs mt-1 text-gray-400 hidden md:block">
-              {stepNumber === 1 && "Date"}
-              {stepNumber === 2 && "Time"}
-              {stepNumber === 3 && "Details"}
-              {stepNumber === 4 && "Service"}
+              {stepNumber === 1 && t('booking.step1')}
+              {stepNumber === 2 && t('booking.step2')}
+              {stepNumber === 3 && t('booking.step3')}
+              {stepNumber === 4 && t('booking.step4')}
             </span>
           </div>
         ))}
@@ -191,8 +247,8 @@ const BookingForm = () => {
           <div className="mx-auto w-20 h-20 bg-gold-500/20 rounded-full flex items-center justify-center mb-6">
             <CheckCircle className="w-10 h-10 text-gold-400" />
           </div>
-          <h4 className="text-xl font-semibold text-white mb-2">Thank You!</h4>
-          <p className="text-gray-400 mb-4">Your appointment has been confirmed. We'll see you soon!</p>
+          <h4 className="text-xl font-semibold text-white mb-2">{t('booking.thankYou')}</h4>
+          <p className="text-gray-400 mb-4">{t('booking.confirmed')}</p>
           <div className="bg-gray-900 p-4 rounded-lg border border-gold-500/20 mb-4">
             <div className="flex items-center justify-center gap-2 mb-2">
               <CalendarIcon className="w-4 h-4 text-gold-400" />
@@ -213,7 +269,7 @@ const BookingForm = () => {
             className="flex items-center justify-center gap-2 w-full bg-green-600 hover:bg-green-700 text-white"
           >
             <MessageCircle className="w-5 h-5" />
-            Send Details to WhatsApp
+            {t('booking.whatsapp')}
           </Button>
         </motion.div>
       ) : (
@@ -229,7 +285,7 @@ const BookingForm = () => {
             >
               <h4 className="font-medium text-white flex items-center gap-2">
                 <CalendarIcon className="w-5 h-5 text-gold-400" /> 
-                Choose Your Preferred Day
+                {t('booking.chooseDay')}
               </h4>
               
               <Calendar
@@ -238,6 +294,7 @@ const BookingForm = () => {
                 onSelect={handleDateSelect}
                 disabled={(date) => date < new Date() || date > new Date(new Date().setMonth(new Date().getMonth() + 2))}
                 className="p-3 bg-gray-900 border border-gold-500/20 rounded-lg text-white"
+                locale={language === 'fr' ? fr : undefined}
                 classNames={{
                   day_selected: "bg-gold-500 text-black hover:bg-gold-600 hover:text-black focus:bg-gold-500 focus:text-black",
                   day_today: "bg-gray-800 text-gold-400 font-bold",
@@ -248,7 +305,7 @@ const BookingForm = () => {
               
               <div className="bg-gray-900/50 p-3 rounded-lg border border-gold-500/10">
                 <p className="text-gray-400 text-sm">
-                  Simply click on your preferred date to continue. We're available for the next 2 months.
+                  {t('booking.dateHelp')}
                 </p>
               </div>
             </motion.div>
@@ -266,10 +323,10 @@ const BookingForm = () => {
               <div className="mb-4">
                 <h4 className="font-medium text-white flex items-center gap-2">
                   <Clock className="w-5 h-5 text-gold-400" /> 
-                  Choose a Time Slot
+                  {t('booking.chooseTime')}
                 </h4>
                 <p className="text-gray-400 text-sm mt-1">
-                  Selected date: <span className="text-gold-400">{formattedDate}</span>
+                  {t('booking.selectedDate')} <span className="text-gold-400">{formattedDate}</span>
                 </p>
               </div>
               
@@ -295,7 +352,7 @@ const BookingForm = () => {
                 variant="outline"
                 className="w-full border-gray-700 text-gray-400 hover:text-white hover:border-gold-500/50 bg-transparent"
               >
-                &larr; Change Date
+                &larr; {t('booking.changeDate')}
               </Button>
             </motion.div>
           )}
@@ -312,46 +369,46 @@ const BookingForm = () => {
               <div className="mb-4">
                 <h4 className="font-medium text-white flex items-center gap-2">
                   <Users className="w-5 h-5 text-gold-400" /> 
-                  Your Information
+                  {t('booking.yourInfo')}
                 </h4>
                 <p className="text-gray-400 text-sm mt-1">
-                  Appointment: <span className="text-gold-400">{formattedDate} at {timeSlot}</span>
+                  {t('booking.appointment')} <span className="text-gold-400">{formattedDate} at {timeSlot}</span>
                 </p>
               </div>
               
               <form onSubmit={handleNextStep} className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Your Name</label>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">{t('booking.name')}</label>
                   <Input
                     id="name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your full name"
+                    placeholder={t('booking.name')}
                     required
                     className="bg-gray-900 border-gray-700 text-white focus:border-gold-500/50"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">Email Address</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">{t('booking.email')}</label>
                   <Input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
+                    placeholder={t('booking.email')}
                     required
                     className="bg-gray-900 border-gray-700 text-white focus:border-gold-500/50"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">Phone Number</label>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">{t('booking.phone')}</label>
                   <Input
                     id="phone"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="Enter your phone number"
+                    placeholder={t('booking.phone')}
                     required
                     className="bg-gray-900 border-gray-700 text-white focus:border-gold-500/50"
                   />
@@ -364,14 +421,14 @@ const BookingForm = () => {
                     variant="outline"
                     className="flex-1 border-gray-700 text-gray-400 hover:text-white hover:border-gold-500/50 bg-transparent"
                   >
-                    &larr; Back
+                    &larr; {t('booking.back')}
                   </Button>
                   
                   <Button
                     type="submit"
                     className="flex-1 bg-gradient-to-r from-gold-400 to-gold-600 hover:from-gold-500 hover:to-gold-700 text-black"
                   >
-                    Continue &rarr;
+                    {t('booking.continue')} &rarr;
                   </Button>
                 </div>
               </form>
@@ -390,10 +447,10 @@ const BookingForm = () => {
               <div className="mb-4">
                 <h4 className="font-medium text-white flex items-center gap-2">
                   <Smile className="w-5 h-5 text-gold-400" /> 
-                  Select Your Treatment
+                  {t('booking.selectTreatment')}
                 </h4>
                 <p className="text-gray-400 text-sm mt-1">
-                  Final step to complete your booking
+                  {t('booking.finalStep')}
                 </p>
               </div>
               
@@ -414,10 +471,10 @@ const BookingForm = () => {
               
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="service" className="block text-sm font-medium text-gray-300 mb-1">Select Your Treatment</label>
+                  <label htmlFor="service" className="block text-sm font-medium text-gray-300 mb-1">{t('booking.selectTreatment')}</label>
                   <Select value={service} onValueChange={setService} required>
                     <SelectTrigger id="service" className="w-full bg-gray-900 border-gray-700 text-white focus:border-gold-500/50">
-                      <SelectValue placeholder="Choose your preferred service" />
+                      <SelectValue placeholder={t('booking.chooseService')} />
                     </SelectTrigger>
                     <SelectContent className="bg-gray-900 border-gold-500/20 text-white">
                       {services.map((item) => (
@@ -436,7 +493,7 @@ const BookingForm = () => {
                     variant="outline"
                     className="flex-1 border-gray-700 text-gray-400 hover:text-white hover:border-gold-500/50 bg-transparent"
                   >
-                    &larr; Back
+                    &larr; {t('booking.back')}
                   </Button>
                   
                   <Button
@@ -444,7 +501,7 @@ const BookingForm = () => {
                     className="flex-1 bg-gradient-to-r from-gold-400 to-gold-600 hover:from-gold-500 hover:to-gold-700 text-black"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Confirming..." : "Complete Booking"}
+                    {isSubmitting ? t('booking.confirming') : t('booking.completeBooking')}
                   </Button>
                 </div>
               </form>

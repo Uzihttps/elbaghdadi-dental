@@ -5,22 +5,22 @@ import { useLanguage } from "@/context/LanguageContext";
 import { AspectRatio } from "./ui/aspect-ratio";
 
 const About = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   const achievements = [
     { 
       icon: GraduationCap, 
-      text: "Médecine dentaire en Russie",
+      text: language === 'fr' ? "Médecine dentaire en Russie" : "Dental medicine in Russia",
       highlightStyle: "text-white"
     },
     { 
       icon: Award, 
-      text: "7+ Years of Professional Experience",
+      text: language === 'fr' ? "7+ années d'expérience professionnelle" : "7+ Years of Professional Experience",
       highlightStyle: "text-white"
     },
     { 
       icon: Check, 
-      text: "Médecine esthétique (formation) en Russie / Italie / Egypt", 
+      text: language === 'fr' ? "Médecine esthétique (formation) en Russie / Italie / Égypte" : "Aesthetic medicine (training) in Russia / Italy / Egypt", 
       highlightStyle: "text-white" 
     },
   ];
