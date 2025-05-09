@@ -95,7 +95,17 @@ const translations = {
     
     // Morning/Afternoon labels
     'time.morning': 'Morning -',
-    'time.afternoon': 'Afternoon -'
+    'time.afternoon': 'Afternoon -',
+    
+    // Contact section
+    'contact.title': 'Exclusive Appointments',
+    'contact.subtitle': 'Schedule your private consultation with Dr. El Baghdadi and experience our premium services tailored to your needs.',
+    'contact.info': 'Contact Information',
+    'contact.description': 'Have questions or need assistance? Our concierge team is ready to assist you with scheduling your appointment and answering any inquiries about our exclusive services.',
+    'contact.location': 'Exclusive Location',
+    'contact.phone': 'Direct Lines',
+    'contact.email': 'VIP Inquiries',
+    'contact.hours': 'Availability'
   },
   fr: {
     // Navigation
@@ -182,7 +192,17 @@ const translations = {
     
     // Morning/Afternoon labels
     'time.morning': 'Matin -',
-    'time.afternoon': 'Après-midi -'
+    'time.afternoon': 'Après-midi -',
+    
+    // Contact section
+    'contact.title': 'Rendez-vous Exclusifs',
+    'contact.subtitle': 'Planifiez votre consultation privée avec Dr. El Baghdadi et découvrez nos services premium adaptés à vos besoins.',
+    'contact.info': 'Informations de Contact',
+    'contact.description': "Des questions ou besoin d'aide ? Notre équipe de conciergerie est prête à vous aider à planifier votre rendez-vous et à répondre à toutes vos questions sur nos services exclusifs.",
+    'contact.location': 'Emplacement Exclusif',
+    'contact.phone': 'Lignes Directes',
+    'contact.email': 'Demandes VIP',
+    'contact.hours': 'Disponibilité'
   }
 };
 

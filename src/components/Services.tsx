@@ -2,38 +2,53 @@
 import { Stethoscope, Syringe, Scissors, Sparkles, Droplet, SmilePlus } from "lucide-react";
 import { motion } from "framer-motion";
 import ServiceCard from "./ServiceCard";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Services = () => {
+  const { t, language } = useLanguage();
+  
   const services = [
     {
       icon: Stethoscope,
-      title: "General Dentistry",
-      description: "Comprehensive dental care including cleanings, fillings, and preventive treatments for optimal oral health.",
+      title: language === 'fr' ? "Dentisterie Générale" : "General Dentistry",
+      description: language === 'fr' 
+        ? "Soins dentaires complets comprenant nettoyages, obturations et traitements préventifs pour une santé bucco-dentaire optimale."
+        : "Comprehensive dental care including cleanings, fillings, and preventive treatments for optimal oral health.",
     },
     {
       icon: Sparkles,
-      title: "Cosmetic Dentistry",
-      description: "Transform your smile with our premium whitening, veneers, and aesthetic restorations using luxury materials.",
+      title: language === 'fr' ? "Dentisterie Esthétique" : "Cosmetic Dentistry",
+      description: language === 'fr'
+        ? "Transformez votre sourire avec nos services premium de blanchiment, facettes et restaurations esthétiques utilisant des matériaux de luxe."
+        : "Transform your smile with our premium whitening, veneers, and aesthetic restorations using luxury materials.",
     },
     {
       icon: Syringe,
-      title: "Botox Treatment",
-      description: "Rejuvenate your appearance with precise, artful administration of premium botox injections.",
+      title: language === 'fr' ? "Traitement Botox" : "Botox Treatment",
+      description: language === 'fr'
+        ? "Rajeunissez votre apparence avec une administration précise et artistique d'injections de botox premium."
+        : "Rejuvenate your appearance with precise, artful administration of premium botox injections.",
     },
     {
       icon: Droplet,
-      title: "Skin Boosters",
-      description: "Experience the pinnacle of skin rejuvenation with hydrating treatments for a radiant, youthful complexion.",
+      title: language === 'fr' ? "Boosters Cutanés" : "Skin Boosters",
+      description: language === 'fr'
+        ? "Découvrez l'apogée du rajeunissement cutané avec des traitements hydratants pour un teint radieux et jeune."
+        : "Experience the pinnacle of skin rejuvenation with hydrating treatments for a radiant, youthful complexion.",
     },
     {
       icon: SmilePlus,
-      title: "Smile Makeover",
-      description: "Achieve the perfect smile with our bespoke combination of elite cosmetic procedures tailored to you.",
+      title: language === 'fr' ? "Transformation du Sourire" : "Smile Makeover",
+      description: language === 'fr'
+        ? "Obtenez le sourire parfait avec notre combinaison sur mesure de procédures cosmétiques d'élite adaptées à vous."
+        : "Achieve the perfect smile with our bespoke combination of elite cosmetic procedures tailored to you.",
     },
     {
       icon: Scissors,
-      title: "Facial Contouring",
-      description: "Sculpt your ideal facial profile with our expert non-surgical techniques and premium treatments.",
+      title: language === 'fr' ? "Contours du Visage" : "Facial Contouring",
+      description: language === 'fr'
+        ? "Sculptez votre profil facial idéal avec nos techniques non chirurgicales expertes et nos traitements premium."
+        : "Sculpt your ideal facial profile with our expert non-surgical techniques and premium treatments.",
     },
   ];
 
@@ -79,16 +94,15 @@ const Services = () => {
             className="inline-block mb-4"
           >
             <span className="px-3 py-1 bg-gold-500/10 text-gold-400 rounded-full text-sm font-medium">
-              Elite Services
+              {language === 'fr' ? 'Services Élite' : 'Elite Services'}
             </span>
           </motion.div>
           
           <h2 className="text-4xl md:text-5xl font-bold mb-6 font-serif">
-            <span className="luxury-gradient gold-glow">Our Premium Services</span>
+            <span className="luxury-gradient gold-glow">{t('services.title')}</span>
           </h2>
           <p className="text-gray-400 text-lg">
-            Experience the epitome of dental care and advanced aesthetic treatments, 
-            meticulously crafted to enhance your natural beauty.
+            {t('services.subtitle')}
           </p>
         </motion.div>
 

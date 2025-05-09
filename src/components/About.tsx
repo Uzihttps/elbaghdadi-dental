@@ -37,7 +37,7 @@ const About = () => {
             transition={{ duration: 0.6 }}
           >
             <div className="rounded-2xl overflow-hidden">
-              <AspectRatio ratio={1/1} className="w-full">
+              <AspectRatio ratio={1/1} className="w-full max-w-md mx-auto">
                 <img 
                   src="/lovable-uploads/64b5b7f7-57a3-4e04-ba97-bb31fba6545d.png" 
                   alt="Dr. El Baghdadi performing a dental procedure" 

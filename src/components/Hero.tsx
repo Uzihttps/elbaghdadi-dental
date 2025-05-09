@@ -2,8 +2,11 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Zap, ChevronRight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Hero = () => {
+  const { t, language } = useLanguage();
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -81,7 +84,7 @@ const Hero = () => {
               <div className="flex items-center gap-2 mb-6">
                 <span className="px-3 py-1 bg-gold-500/10 text-gold-400 rounded-full text-sm font-medium flex items-center">
                   <Sparkles className="w-4 h-4 mr-1" />
-                  <span>Premium Aesthetic Care</span>
+                  <span>{t('hero.badge')}</span>
                 </span>
               </div>
             </motion.div>
@@ -90,15 +93,15 @@ const Hero = () => {
               className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight"
               variants={itemVariants}
             >
-              <span className="luxury-gradient gold-glow font-serif">Beautiful Smiles</span> <br />
-              <span className="text-white">& Aesthetic Excellence</span>
+              <span className="luxury-gradient gold-glow font-serif">{t('hero.title1')}</span> <br />
+              <span className="text-white">{t('hero.title2')}</span>
             </motion.h1>
             
             <motion.p 
               className="text-lg md:text-xl text-gray-300 max-w-xl"
               variants={itemVariants}
             >
-              Dr. El Baghdadi combines dental expertise with aesthetic treatments to enhance your natural beauty and confidence.
+              {t('hero.description')}
             </motion.p>
             
             <motion.div 
@@ -107,12 +110,12 @@ const Hero = () => {
             >
               <Button asChild size="lg" className="bg-gold-500 hover:bg-gold-600 text-black font-medium px-6 py-6 rounded-md">
                 <a href="#booking" className="flex items-center gap-2">
-                  Book Appointment <ChevronRight className="h-4 w-4" />
+                  {t('nav.book')} <ChevronRight className="h-4 w-4" />
                 </a>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-gold-500/50 text-gold-400 hover:bg-gold-500/10 rounded-md">
                 <a href="#services" className="flex items-center gap-2">
-                  Explore Services <Zap className="h-4 w-4" />
+                  {language === 'fr' ? 'Explorer les Services' : 'Explore Services'} <Zap className="h-4 w-4" />
                 </a>
               </Button>
             </motion.div>
@@ -132,7 +135,7 @@ const Hero = () => {
                   +50
                 </div>
               </div>
-              <p className="text-gray-400">Trusted by over <span className="text-gold-400 font-semibold">500+</span> happy patients</p>
+              <p className="text-gray-400">{t('hero.trusted')} <span className="text-gold-400 font-semibold">500+</span> {t('hero.patients')}</p>
             </motion.div>
           </div>
 
@@ -161,8 +164,8 @@ const Hero = () => {
                   <Sparkles className="h-6 w-6 text-black" />
                 </div>
                 <div>
-                  <h3 className="font-medium text-gold-300">Exceptional Care</h3>
-                  <p className="text-gray-300 text-sm">State-of-the-art technology and techniques</p>
+                  <h3 className="font-medium text-gold-300">{t('hero.exceptional')}</h3>
+                  <p className="text-gray-300 text-sm">{t('hero.tech')}</p>
                 </div>
               </div>
             </motion.div>

@@ -1,6 +1,8 @@
+
 import { motion } from "framer-motion";
 import { MapPin, Phone, Clock, Mail } from "lucide-react";
 import BookingForm from "./BookingForm";
+import { useLanguage } from "@/context/LanguageContext";
 
 const ContactInfo = ({ icon: Icon, title, content }: { icon: any; title: string; content: React.ReactNode }) => (
   <div className="flex gap-4 items-start group">
@@ -15,6 +17,8 @@ const ContactInfo = ({ icon: Icon, title, content }: { icon: any; title: string;
 );
 
 const Contact = () => {
+  const { t, language } = useLanguage();
+  
   return (
     <section id="booking" className="section bg-black relative overflow-hidden">
       {/* Gold accent */}
@@ -32,10 +36,14 @@ const Contact = () => {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            <span className="gold-gradient">Exclusive Appointments</span>
+            <span className="gold-gradient">
+              {language === 'fr' ? 'Rendez-vous Exclusifs' : 'Exclusive Appointments'}
+            </span>
           </h2>
           <p className="text-gray-400">
-            Schedule your private consultation with Dr. El Baghdadi and experience our premium services tailored to your needs.
+            {language === 'fr' 
+              ? 'Planifiez votre consultation privée avec Dr. El Baghdadi et découvrez nos services premium adaptés à vos besoins.'
+              : 'Schedule your private consultation with Dr. El Baghdadi and experience our premium services tailored to your needs.'}
           </p>
         </motion.div>
 
@@ -49,18 +57,21 @@ const Contact = () => {
           >
             <div>
               <h3 className="text-2xl font-semibold text-white mb-6">
-                <span className="border-b-2 border-gold-500 pb-1">Contact Information</span>
+                <span className="border-b-2 border-gold-500 pb-1">
+                  {language === 'fr' ? 'Informations de Contact' : 'Contact Information'}
+                </span>
               </h3>
               <p className="text-gray-400 mb-8">
-                Have questions or need assistance? Our concierge team is ready to assist you
-                with scheduling your appointment and answering any inquiries about our exclusive services.
+                {language === 'fr'
+                  ? "Des questions ou besoin d'aide ? Notre équipe de conciergerie est prête à vous aider à planifier votre rendez-vous et à répondre à toutes vos questions sur nos services exclusifs."
+                  : "Have questions or need assistance? Our concierge team is ready to assist you with scheduling your appointment and answering any inquiries about our exclusive services."}
               </p>
             </div>
             
             <div className="space-y-8">
               <ContactInfo 
                 icon={MapPin} 
-                title="Exclusive Location" 
+                title={language === 'fr' ? "Emplacement Exclusif" : "Exclusive Location"}
                 content={
                   <p className="text-gray-400">
                     Rue Hassan 2 résidence Mary Ida<br />
@@ -71,7 +82,7 @@ const Contact = () => {
               
               <ContactInfo 
                 icon={Phone} 
-                title="Direct Lines" 
+                title={language === 'fr' ? "Lignes Directes" : "Direct Lines"}
                 content={
                   <div className="text-gray-400 space-y-1">
                     <a href="tel:0661338152" className="block hover:text-gold-400 transition-colors">
@@ -89,7 +100,7 @@ const Contact = () => {
               
               <ContactInfo 
                 icon={Mail} 
-                title="VIP Inquiries" 
+                title={language === 'fr' ? "Demandes VIP" : "VIP Inquiries"}
                 content={
                   <p className="text-gray-400">
                     <a href="mailto:vip@elbaghdadidental.com" className="hover:text-gold-400 transition-colors">
@@ -101,13 +112,13 @@ const Contact = () => {
               
               <ContactInfo 
                 icon={Clock} 
-                title="Availability" 
+                title={language === 'fr' ? "Disponibilité" : "Availability"}
                 content={
                   <div className="text-gray-400 space-y-1">
-                    <p>Monday - Friday: 9:30 AM - 1:00 PM</p>
-                    <p>Monday - Friday: 2:00 PM - 6:30 PM</p>
-                    <p>Saturday: 9:30 AM - 2:00 PM</p>
-                    <p>Sunday: By appointment only</p>
+                    <p>{language === 'fr' ? "Lundi - Vendredi : 9h30 - 13h00" : "Monday - Friday: 9:30 AM - 1:00 PM"}</p>
+                    <p>{language === 'fr' ? "Lundi - Vendredi : 14h00 - 18h30" : "Monday - Friday: 2:00 PM - 6:30 PM"}</p>
+                    <p>{language === 'fr' ? "Samedi : 9h30 - 14h00" : "Saturday: 9:30 AM - 2:00 PM"}</p>
+                    <p>{language === 'fr' ? "Dimanche : Sur rendez-vous uniquement" : "Sunday: By appointment only"}</p>
                   </div>
                 } 
               />
