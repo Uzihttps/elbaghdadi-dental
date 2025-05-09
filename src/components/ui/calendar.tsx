@@ -23,7 +23,7 @@ function Calendar({
   
   // Custom formatting for day names in French
   const formatters = language === 'fr' ? {
-    formatWeekdayName: (weekday: Date) => {
+    formatWeekday: (weekday: Date) => {
       const day = weekday.getDay();
       const frenchDays = ['di', 'lu', 'ma', 'me', 'je', 've', 'sa'];
       return frenchDays[day];
